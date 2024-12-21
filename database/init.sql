@@ -46,6 +46,9 @@ INSERT INTO users (username, email, password_hash) VALUES
 
 -- Inserting Categories
 INSERT INTO categories (name) VALUES
-('Work'),
+('Trabajo'),
+('Estudios'),
 ('Personal'),
-('Shopping');
+('Inversiones'),
+('Planes'),
+('Compras');

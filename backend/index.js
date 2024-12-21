@@ -12,14 +12,13 @@ app.use(express.json());
 
 const pool = new Pool({
   user: process.env.PG_USER,
-  host: process.env.PG_HOST || 'db', // Cambiar localhost a db
+  host: process.env.PG_HOST || 'db', 
   database: process.env.PG_DB,
   password: process.env.PG_PASSWORD,
   port: process.env.PG_PORT || 5432,
 });
 
 
-// Ruta para obtener todas las tareas, con categoría y etiquetas
 app.get('/tasks', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -39,7 +38,6 @@ app.get('/tasks', async (req, res) => {
   }
 });
 
-// Ruta para crear una tarea con categoría y etiquetas
 app.post('/tasks', async (req, res) => {
   const { title, description, category_id, tag_names } = req.body;
 
@@ -51,7 +49,6 @@ app.post('/tasks', async (req, res) => {
 
     const task = result.rows[0];
 
-    // Asignar etiquetas a la tarea
     for (let tag_name of tag_names) {
       const tagResult = await pool.query(
         'INSERT INTO tags (name) VALUES ($1) ON CONFLICT (name) DO NOTHING RETURNING id',
@@ -74,7 +71,6 @@ app.post('/tasks', async (req, res) => {
   }
 });
 
-// Ruta para actualizar una tarea
 app.put('/tasks/:id', async (req, res) => {
   const { id } = req.params;
   const { title, completed, category_id, tag_names } = req.body;
@@ -86,7 +82,6 @@ app.put('/tasks/:id', async (req, res) => {
     );
     const task = result.rows[0];
 
-    // Eliminar etiquetas existentes y volver a asociarlas
     await pool.query('DELETE FROM task_tags WHERE task_id = $1', [task.id]);
 
     for (let tag_name of tag_names) {
@@ -111,12 +106,11 @@ app.put('/tasks/:id', async (req, res) => {
   }
 });
 
-// Ruta para eliminar una tarea
 app.delete('/tasks/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query('DELETE FROM task_tags WHERE task_id = $1', [id]); // Eliminar las relaciones con etiquetas
-    await pool.query('DELETE FROM tasks WHERE id = $1', [id]); // Eliminar la tarea
+    await pool.query('DELETE FROM task_tags WHERE task_id = $1', [id]); 
+    await pool.query('DELETE FROM tasks WHERE id = $1', [id]); 
     res.status(204).send();
   } catch (err) {
     console.error(err.message);
@@ -124,7 +118,6 @@ app.delete('/tasks/:id', async (req, res) => {
   }
 });
 
-// Ruta para obtener todas las categorías
 app.get('/categories', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM categories');
@@ -135,7 +128,6 @@ app.get('/categories', async (req, res) => {
   }
 });
 
-// Ruta para crear una categoría
 app.post('/categories', async (req, res) => {
   const { name } = req.body;
   try {
@@ -150,7 +142,6 @@ app.post('/categories', async (req, res) => {
   }
 });
 
-// Ruta para obtener todas las etiquetas
 app.get('/tags', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM tags');
@@ -161,7 +152,6 @@ app.get('/tags', async (req, res) => {
   }
 });
 
-// Ruta para crear una etiqueta
 app.post('/tags', async (req, res) => {
   const { name } = req.body;
   try {
@@ -176,12 +166,10 @@ app.post('/tags', async (req, res) => {
   }
 });
 
-// Ruta principal para probar el backend
 app.get('/', (req, res) => {
   res.send('Backend funcionando correctamente');
 });
 
-// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Backend corriendo en http://localhost:${PORT}`);
 });

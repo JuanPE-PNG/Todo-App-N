@@ -41,7 +41,12 @@ services:
     volumes:
       - ./backend:/app
       - /app/node_modules
-  
+    healthcheck: 
+      test: ["CMD-SHELL", "curl -f http://localhost:5000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   frontend:
     build:
       context: ./frontend
@@ -49,10 +54,13 @@ services:
     container_name: frontend
     ports:
       - "8080:80"
+    environment: 
+      - REACT_APP_BACKEND_URL=http://backend:5000
+    depends_on: 
+      backend:
+        condition: service_healthy
     networks:
       - todo-network
-
-
 
 networks:
   todo-network:
