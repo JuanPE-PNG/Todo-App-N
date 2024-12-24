@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/todo-app-445702/backend', './backend']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/todo-app-445702/frontend', './frontend']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/todo-app-445702/backend']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/todo-app-445702/frontend']
+
+images:
+  - 'gcr.io/todo-app-445702/backend'
+  - 'gcr.io/todo-app-445702/frontend'

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || "https://backend-202950146573.us-central1.run.app";
+
+
 const TaskEdit = () => {
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -19,7 +22,7 @@ const TaskEdit = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks");
+      const response = await axios.get(`${BASE_URL}/tasks`);
       setTasks(response.data);
     } catch (err) {
       console.error(err);
@@ -28,7 +31,7 @@ const TaskEdit = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/categories");
+      const response = await axios.get(`${BASE_URL}/categories`);
       setCategories(response.data);
     } catch (err) {
       console.error(err);
@@ -55,7 +58,7 @@ const TaskEdit = () => {
     e.preventDefault();
     try {
       const tagNames = form.tagNames.split(",").map((tag) => tag.trim());
-      await axios.put(`http://localhost:5000/tasks/${selectedTask.id}`, {
+      await axios.put(`${BASE_URL}/categories/${selectedTask.id}`, {
         title: form.title,
         description: form.description,
         category_id: form.categoryId,

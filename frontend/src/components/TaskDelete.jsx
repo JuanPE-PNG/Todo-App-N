@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || "https://backend-202950146573.us-central1.run.app";
+
+
 const TaskDelete = () => {
   const [tasks, setTasks] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState("");
@@ -11,7 +14,7 @@ const TaskDelete = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks");
+      const response = await axios.get(`${BASE_URL}/tasks`);
       setTasks(response.data);
     } catch (err) {
       console.error(err);
@@ -24,7 +27,7 @@ const TaskDelete = () => {
       return;
     }
     try {
-      await axios.delete(`http://localhost:5000/tasks/${selectedTaskId}`);
+      await axios.delete(`${BASE_URL}/tasks/${selectedTaskId}`);
       alert("Task deleted!");
       fetchTasks();
       setSelectedTaskId("");

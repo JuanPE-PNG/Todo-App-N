@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || "https://backend-202950146573.us-central1.run.app";
+
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
 
@@ -10,7 +12,7 @@ const TaskList = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks");
+      const response = await axios.get(`${BASE_URL}/tasks`);
       setTasks(response.data);
     } catch (err) {
       console.error(err);

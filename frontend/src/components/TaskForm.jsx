@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || "https://backend-202950146573.us-central1.run.app";
+
 const TaskForm = () => {
   const [categories, setCategories] = useState([]);
   const [form, setForm] = useState({
@@ -16,7 +18,7 @@ const TaskForm = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/categories");
+      const response = await axios.get(`${BASE_URL}/categories`);
       setCategories(response.data);
     } catch (err) {
       console.error(err);
@@ -32,7 +34,7 @@ const TaskForm = () => {
     e.preventDefault();
     try {
       const tagNames = form.tagNames.split(",").map((tag) => tag.trim());
-      await axios.post("http://localhost:5000/tasks", {
+      await axios.post(`${BASE_URL}/tasks`, {
         title: form.title,
         description: form.description,
         category_id: form.categoryId,
